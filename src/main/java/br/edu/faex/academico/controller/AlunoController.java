@@ -18,4 +18,8 @@ public class AlunoController {
     public List<Aluno> listar(){
         return this.service.listar();
     }
+
+    public Aluno buscarPorId(long id){
+        return service.buscarPorId(id);
+    }
 }
