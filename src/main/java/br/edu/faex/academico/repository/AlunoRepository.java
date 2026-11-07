@@ -14,7 +14,7 @@ import java.util.List;
 public class AlunoRepository {
     private List<Aluno> alunos = new ArrayList<>();
 
-    public void salvar(Aluno aluno){
+    public void salvar(Aluno aluno) {
         //alunos.add(aluno);
         String sql = "insert into alunos (nome, email, ativo) VALUES (?, ?, ?)";
         try {
@@ -32,7 +32,7 @@ public class AlunoRepository {
         }
     }
 
-    public List<Aluno> listar(){
+    public List<Aluno> listar() {
         //return alunos;
         List<Aluno> alunos = new ArrayList<>();
         String sql = "SELECT * FROM alunos";
@@ -40,7 +40,7 @@ public class AlunoRepository {
             Connection conexao = Conexao.conectar();
             PreparedStatement comando = conexao.prepareStatement(sql);
             ResultSet resultado = comando.executeQuery();
-            while (resultado.next()){
+            while (resultado.next()) {
                 Aluno aluno = new Aluno();
                 aluno.setId(resultado.getLong("id"));
                 aluno.setNome(resultado.getString("nome"));
@@ -58,14 +58,14 @@ public class AlunoRepository {
 
     }
 
-    public Aluno buscarPorId(Long id){
+    public Aluno buscarPorId(Long id) {
         String sql = "SELECT * FROM alunos WHERE id = ? ";
         try {
             Connection conexao = Conexao.conectar();
             PreparedStatement comando = conexao.prepareStatement(sql);
             comando.setLong(1, id);
             ResultSet resultado = comando.executeQuery();
-            if(resultado.next()){
+            if (resultado.next()) {
                 Aluno aluno = new Aluno();
                 aluno.setId(resultado.getLong("id"));
                 aluno.setNome(resultado.getString("nome"));
@@ -74,21 +74,28 @@ public class AlunoRepository {
                 return aluno;
             }
 
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             System.out.println("Erro ao listar: " + e.getMessage());
         }
         return null;
 
     }
 
-    public void excluir(Long id){
-        for (Aluno aluno : alunos){
-            if(aluno.getId().equals(id)){
-                alunos.remove(aluno);
-                return;
-            }
-        }
+    public void excluir(Long id) {
+        String sql = "DELETE FROM alunos WHERE id = ?";
+        try {
+            Connection conexao = Conexao.conectar();
+            PreparedStatement comando = conexao.prepareStatement(sql);
+            comando.setLong(1, id);
+            comando.executeUpdate();
+            conexao.close();
+            comando.close();
+        } catch (SQLException e) {
+        System.out.println("Erro ao excluir aluno: " + e.getMessage());
     }
+
+
+
 
     public void atualizar(Aluno alunoEditado){
         for (Aluno aluno : alunos){
