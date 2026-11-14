@@ -87,15 +87,25 @@ public class AlunoRepository {
             Connection conexao = Conexao.conectar();
             PreparedStatement comando = conexao.prepareStatement(sql);
             comando.setLong(1, id);
+            int linhasAfetadas = comando.executeUpdate();
+
             comando.executeUpdate();
+
             conexao.close();
             comando.close();
+
+            if (linhasAfetadas > 0) {
+                System.out.println("Aluno excluído com sucesso!");
+            } else {
+                System.out.println("Nenhum aluno encontrado com o ID informado.");
+            }
+
         } catch (SQLException e) {
-        System.out.println("Erro ao excluir aluno: " + e.getMessage());
+            System.out.println("Erro ao excluir aluno: " + e.getMessage());
+        }
+
+
     }
-
-
-
 
     public void atualizar(Aluno alunoEditado){
         for (Aluno aluno : alunos){
